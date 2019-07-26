@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="bootstrap/js/jquery.min.js"></script>
+<script src="lib/layui/layui.js"></script>
+<title>JS制作华容道小游戏</title>
+  <!-- global stylesheets -->
+    
+<style>
+ *{margin: 0;padding: 0;}
+ body{
+	font-size: 30px;
+	background-color:rgba(23,44,60);
+	overflow:hidden;
+ }
+ .readme{
+	position:absolute;
+	left: 5%;
+	top:100px;
+	width: 250px;
+ }
+ .readme span{
+	  font-size: 16px;
+	  text-align:center;
+	  color: red;
+	  font-weight: 800;
+ }
+ .readme p{
+	display: block;
+	font-size: 16px;
+	text-indent: 20px;
+	color: #75ffe7;
+ }
+ .tab{
+	margin: 10px auto 0;
+	border-radius: 15px;
+	text-align: center;
+	font-weight: bold;
+	background-color:#999;
+ }
+ td{
+	width: 100px;
+	height:100px;
+	border-radius:15px;
+
+ }
+input{
+ 	width: 100px;
+	height:100px;
+	border-radius:15px;
+	font-size: 50px;
+	color: white;
+	background-color: green
+ }
+ 
+ .text{
+	position: absolute;
+	right:20%;
+	top: 100px;
+	color: red;
+ }
+ .restart{
+	font-size: 22px;
+	color: red;
+	text-align: center;
+ } 
+
+</style>
+
+</head>
+<body>
+	<br>
+	<hr>
+      <div id="start" class="restart">开始游戏</div>
+      <br>
+      <div id="restart" class="restart">重置</div>
+	  <table id="tab" class="tab" cellpadding="6">
+	  	<tr>
+	  		
+	  		<td onclick="Slide()"><input type="button" value="1"/></td>
+	  	  <td onclick="Slide()"><input type="button" value="2"/></td>
+	  		<td onclick="Slide()"><input type="button" value="3"/></td>
+	  		<td onclick="Slide()"><input type="button" value="4"/></td>
+	  	</tr>
+	    <tr>
+	  		<td onclick="Slide()"><input type="button" value="5"/></td>
+	  		<td onclick="Slide()"><input type="button" value="6"/></td>
+	  		<td onclick="Slide()"><input type="button" value="7"/></td>
+	  		<td onclick="Slide()"><input type="button" value="8"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td onclick="Slide()"><input type="button" value="9"/></td>
+	  		<td onclick="Slide()"><input type="button" value="10"/></td>
+	  		<td onclick="Slide()"><input type="button" value="11"/></td>
+	  		<td onclick="Slide()"><input type="button" value="12"/></td>
+	  	</tr>
+	  	<tr>
+	  		<td onclick="Slide()"><input type="button" value="13"/></td>
+	  		<td onclick="Slide()"><input type="button" value="14"/></td>
+	  		<td onclick="Slide()"><input type="button" value="15"/></td>
+	  		<td style="background-color: #999;"></td>
+	  	</tr>
+	  </table>
+<script type="text/javascript">
+	
+	 layui.use(['laydate','element','laypage','layer'], function(){
+        $ = layui.jquery;//jquery
+        laydate = layui.laydate;//日期插件
+        lement = layui.element();//面包导航
+        laypage = layui.laypage;//分页
+        layer = layui.layer;//弹出层
+
+        //以上模块根据需要引入
+        laypage({
+            cont: 'page'
+            ,pages: 100
+            ,first: 1
+            ,last: 100
+            ,prev: '<em><</em>'
+            ,next: '<em>></em>'
+        });
+    });
+ 
+    
+    var tab=$("#tab").find("td");
+    /*
+     * 重置数字
+     */
+	$("#restart").click(function(){
+		tab.eq(15).html('');
+		for(var i=1;i<=15;i++){
+		tab.eq(i-1).html('<input type="button" value="'+i+'"/>');
+		}
+	})
+	
+    var arr=[11,7,1,12,6,15,8,9,4,5,14,13,3,10,2];
+    var arr1=[10,14,8,9,2,13,15,11,5,1,6,3,7,4,12];
+    var arr2=[8,3,1,6,5,14,15,2,10,4,12,11,9,13,7];
+    var arr3=[4,3,13,9,6,8,5,2,1,11,12,7,14,10,15];
+    var arr4=[1,3,6,4,9,13,15,12,14,12,7,8,11,2,5];
+    var arr5=[4,2,6,11,13,9,7,14,5,10,15,12,3,8,1];
+    var arr6=[2,14,12,11,15,10,6,5,3,1,9,13,8,4,7];
+    var arr7=[3,9,2,12,8,13,14,15,1,6,7,11,5,4,10];
+    var arr8=[11,13,14,4,12,5,7,1,9,3,6,8,10,15,2];
+    var arr9=[5,13,6,15,7,2,8,9,14,1,10,11,3,12,4];
+    var arrs=new Array(arr,arr1,arr2,arr3,arr4,arr5,arr6,arr7,arr8,arr9);
+    /*
+     * 随机生成数字
+     */
+	$("#start").click(function(){
+		var num=Math.floor(Math.random()*10);
+		
+	/*arr.sort(function(){ return 0.5 - Math.random() }) */
+	for(var i=0;i<15;i++){
+		tab.eq(i).html('<input type="button" value="'+arrs[num][i]+'"/>');
+		}
+        tab.eq(15).html('');
+	})
+	/*
+	 * 开始滑动
+	 */
+	function Slide(){
+		
+		var td=$("#tab").find("td");
+       for(var i=0;i<td.length;i++){
+        td[i].index=i;
+        td[i].onclick=function(x){
+            return function(){
+    var pre=td.eq(x).prev().children("input").val();
+		var nex=td.eq(x).next().children("input").val();
+    var top=td.eq(x-4).children("input").val();
+		var down=td.eq(x+4).children("input").val();
+		var bl=td.eq(x).children("input").val();
+       if(top==null&&x!=0&&x!=1&&x!=2&&x!=3){
+        	
+	     td.eq(x-4).html('<input type="button" value="'+bl+'">');
+	     td.eq(x).html('')
+	    	
+       }else if(down==null&&x!=12&&x!=13&&x!=14&&x!=15){
+	     	
+	     td.eq(x+4).html('<input type="button" value="'+bl+'">');
+	     td.eq(x).html('')
+	    	
+	     }else if(pre==null&&x!=0&&x!=4&&x!=8&&x!=12){
+	     	
+	     td.eq(x).prev().html('<input type="button" value="'+bl+'">');
+	     td.eq(x).html('')
+	     	
+	     }else if(nex==null&&x!=3&&x!=7&&x!=11&&x!=15){
+	     td.eq(x).next().html('<input type="button" value="'+bl+'">');
+	     td.eq(x).html('')
+	    	
+	     }else{
+	     	return false;
+	     }
+	     if(check()==1){
+	     	layer.msg('通关',{icon:6});
+	     }else{
+	     	return false;
+	     }
+            }
+        }(i)
+    }
+    
+	    
+	}
+	/*
+	 * 验证是否符合游戏规则
+	 * 
+	 */
+	function check(){
+		for(var i=0;i<15;i++){
+			if(tab.eq(i).find("input").val()==i+1){
+				
+			}else{
+				return 0;
+			}
+		}
+		return 1;
+	}
+</script>  
+</body>
+</html>

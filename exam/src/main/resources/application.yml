@@ -1,0 +1,17 @@
+server:
+  port: 8002
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/exam
+    username: root
+    password: 6726
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
